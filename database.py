@@ -16,7 +16,11 @@ class Users(Base):
 	__tablename__ = 'users'
 	id = Column ( Integer, primary_key = True)
 	fname = Column(String(80), nullable = False)
+	lname = Column(String(80), nullable = False)
 	email = Column(String(120))
+	passwd = Column(String())
+	contact = Column(String(10), nullable = False)
+	reports = Column(Integer)
 
 	# function to enable flask jsonify	
 	@property
@@ -24,7 +28,9 @@ class Users(Base):
 		return {
 			'id': self.id,
 			'fname': self.fname,
+			'lname': self.lname,
 			'email': self.email
+			'contact': self.contact
 			}
 # Item Table
 class Items(Base):
@@ -33,8 +39,10 @@ class Items(Base):
 	name = Column(String(80), nullable = False)
 	description = Column(String(300), nullable = False)
 	price = Column(Numeric, nullable = False)
+	negotiable = Column(Boolean(create_constraint = True))
 	user_id = Column(Integer, ForeignKey('users.id'))
 	users = relationship(Users)
+	created = Column(Date) # check python data and time module to determine how to set this value
 
 	@property
 	def serialize(self):
@@ -43,7 +51,9 @@ class Items(Base):
 			'name': self.name,
 			'description': self.description,
 			'price': self.price,
+			'negotiable': self.negotiable,
 			'user_id': self.user_id,
+			'created': self.created,
 			}
 
 
