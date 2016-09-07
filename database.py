@@ -3,6 +3,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+from passlib.hash import pbkdf2_sha256
 
 Base = declarative_base()
 
@@ -18,7 +19,7 @@ class Users(Base):
 	fname = Column(String(80), nullable = False)
 	lname = Column(String(80), nullable = False)
 	email = Column(String(120))
-	passwd_hash = Column(String())
+	pass_hash = Column(String())
 	contact = Column(String(10), nullable = False)
 	reports = Column(Integer)
 
@@ -34,11 +35,11 @@ class Users(Base):
 			}
 	# function to hash the password befor storing
 	def hashPass(self,password):
-		pass
+		self.pass_hash = pbkdf2_sha256(password)
 
 	# function to verify passwords with hashes
 	def verifyPass(self,password):
-		pass
+		return pbkdf2_sha256.verify(password,self.pass_hash)
 
 # Item Table
 class Items(Base):
