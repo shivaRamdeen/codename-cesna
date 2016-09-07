@@ -4,17 +4,11 @@ from database import Base, Users, Items
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 
-#DB connction setup
+# DB connction setup
 engine = create_engine('mysql://root:password@127.0.0.1/hustle')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
-#test endpoint we can remove this now
-@app.route('/')
-@app.route('/home', methods=['GET','POST','PUT','DELETE'])
-def Home():
-	return "Hello World"
 
 #all users endpoint
 @app.route('/v1.0/users', methods=['GET','POST','PUT','DELETE'])
