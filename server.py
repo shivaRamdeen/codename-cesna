@@ -22,6 +22,9 @@ def User():
 	if request.method == 'PUT':
 		return updateUser()
 
+	if request.method == 'DELETE':
+		return deleteUser()
+
 #all items endpoint
 @app.route('/v1.0/items', methods=['GET','POST','PUT','DELETE'])
 def Items():
@@ -69,6 +72,18 @@ def createUser():
 # update user account
 def updateUser():
 	return "Account Updated Successfully"
+
+# delete user account
+def deleteUser():
+	# check for valid parameters
+	id = request.json.get('id')
+	if id is None:
+		print "Required arumennt not found in request"
+		abort(400)
+	# delete account
+	delUser = session.query(User).filter_by(id = request.json.get('id')).first()
+	session.delete(delUser)
+	return jsonify({'message':'Account %s was successfully deleted' % delUser.id}),200
 
 # get all items
 def getItems():
