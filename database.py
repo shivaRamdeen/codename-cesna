@@ -18,7 +18,7 @@ class Users(Base):
 	fname = Column(String(80), nullable = False)
 	lname = Column(String(80), nullable = False)
 	email = Column(String(120))
-	passwd = Column(String())
+	passwd_hash = Column(String())
 	contact = Column(String(10), nullable = False)
 	reports = Column(Integer)
 
@@ -32,6 +32,14 @@ class Users(Base):
 			'email': self.email
 			'contact': self.contact
 			}
+	# function to hash the password befor storing
+	def hashPass(self,password):
+		pass
+
+	# function to verify passwords with hashes
+	def verifyPass(self,password):
+		pass
+
 # Item Table
 class Items(Base):
 	__tablename__ = 'items'
