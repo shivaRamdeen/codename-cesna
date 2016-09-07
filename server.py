@@ -43,7 +43,28 @@ def getUsers():
 
 # create user account
 def createUser():
-	return "Account created successfully"
+	fname = request.json.get('fname')
+	lname = request.json.get('lname')
+	password = request.json.get('password')
+	email = request.json.get('email')
+	contact = requenst.json.get('contact')
+
+	# check if params are valid
+	if fname is None or lname is None or password is None or email is None or contact is None:
+		print "Requred arguments not found"
+		abort(400)
+
+	# check if user already exits
+	if session.query(User).filter_by(email = email).first() is not None:
+		print "The email address is already associated with an existing account!"
+		return jsonify({'message':'The email address is already associated with an existing account!'}), 200
+
+	# create account
+	newUser = Users(fname = fname, lname = lname, email = email, contact = contact, reports = 0)
+	newUser.hashPass(password)
+	session.add(newUser)
+	session.commit()
+	return jsonify({'message': 'Account Created for %s %s' % newUser.fname, newUser.lname}),201
 
 # update user account
 def updateUser():
