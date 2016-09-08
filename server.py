@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database import Base, Users, Items
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 import pdb
 app = Flask(__name__)
 
@@ -58,7 +58,6 @@ def createUser():
 		print "Requred arguments not found"
 		abort(400)
 
-	pdb.set_trace()
 	# check if user already exits
 	exists = session.query(Users).filter_by(email = email).first()
 	if exists is not None:
