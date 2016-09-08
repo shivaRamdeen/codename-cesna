@@ -1,5 +1,5 @@
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Numeric
+from sqlalchemy import Column, ForeignKey, Integer, String, Numeric, Boolean, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -19,7 +19,7 @@ class Users(Base):
 	fname = Column(String(80), nullable = False)
 	lname = Column(String(80), nullable = False)
 	email = Column(String(120))
-	pass_hash = Column(String())
+	pass_hash = Column(String(120))
 	contact = Column(String(10), nullable = False)
 	reports = Column(Integer)
 
@@ -30,12 +30,12 @@ class Users(Base):
 			'id': self.id,
 			'fname': self.fname,
 			'lname': self.lname,
-			'email': self.email
-			'contact': self.contact
+			'email': self.email,
+			'contact': self.contact,
 			}
 	# function to hash the password befor storing
 	def hashPass(self,password):
-		self.pass_hash = pbkdf2_sha256(password)
+		self.pass_hash = pbkdf2_sha256.encrypt(password)
 
 	# function to verify passwords with hashes
 	def verifyPass(self,password):

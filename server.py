@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database import Base, Users, Items
 from flask import Flask, request, jsonify
+import pdb
 app = Flask(__name__)
 
 # DB connction setup
@@ -50,15 +51,17 @@ def createUser():
 	lname = request.json.get('lname')
 	password = request.json.get('password')
 	email = request.json.get('email')
-	contact = requenst.json.get('contact')
-
+	contact = request.json.get('contact')
+	print("%s %s %s %s %s" % (fname, lname, password, email, contact))
 	# check if params are valid
 	if fname is None or lname is None or password is None or email is None or contact is None:
 		print "Requred arguments not found"
 		abort(400)
 
+	pdb.set_trace()
 	# check if user already exits
-	if session.query(User).filter_by(email = email).first() is not None:
+	exists = session.query(Users).filter_by(email = email).first()
+	if exists is not None:
 		print "The email address is already associated with an existing account!"
 		return jsonify({'message':'The email address is already associated with an existing account!'}), 200
 
@@ -67,7 +70,7 @@ def createUser():
 	newUser.hashPass(password)
 	session.add(newUser)
 	session.commit()
-	return jsonify({'message': 'Account Created for %s %s' % newUser.fname, newUser.lname}),201
+	return jsonify({'message': 'Account Created for %s' % newUser.fname}), 201
 
 # update user account
 def updateUser():
@@ -83,7 +86,7 @@ def deleteUser():
 	# delete account
 	delUser = session.query(User).filter_by(id = request.json.get('id')).first()
 	session.delete(delUser)
-	return jsonify({'message':'Account %s was successfully deleted' % delUser.id}),200
+	return jsonify({'message':'Account %s was successfully deleted' % delUser.id}), 200
 
 # get all items
 def getItems():
