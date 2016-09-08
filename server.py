@@ -80,10 +80,10 @@ def deleteUser():
 	# check for valid parameters
 	id = request.json.get('id')
 	if id is None:
-		print "Required arumennt not found in request"
+		print "Required argument not found in request"
 		abort(400)
 	# delete account
-	delUser = session.query(User).filter_by(id = request.json.get('id')).first()
+	delUser = session.query(Users).filter_by(id = request.json.get('id')).first()
 	session.delete(delUser)
 	return jsonify({'message':'Account %s was successfully deleted' % delUser.id}), 200
 
