@@ -82,10 +82,16 @@ def deleteUser():
 	if id is None:
 		print "Required argument not found in request"
 		abort(400)
+
 	# delete account
 	delUser = session.query(Users).filter_by(id = request.json.get('id')).first()
-	session.delete(delUser)
-	return jsonify({'message':'Account %s was successfully deleted' % delUser.id}), 200
+
+	if delUser is not None:
+		session.delete(delUser)
+		session.commit()
+		return jsonify({'message':'Account %s was successfully deleted' % delUser.id}), 200
+
+	return jsonify({'message':'The account does not exist'}), 200
 
 # get all items
 def getItems():
