@@ -150,19 +150,21 @@ def getItems():
 # create item
 def createItem():
 	id = request.json.get('id')
-	name request.json.get('name')
+	name = request.json.get('name')
 	desc = request.json.get('description')
 	price = request.json.get('price')
 	negotiable = request.json.get('negotiable')
 	# created = request.json.get('created') # not sure if client should handle this or server.
 
-	if id is not None or name is not None or desc is not None or price is not None or negotiable is not None:
-		# create item
-		newItem = Items(name = name, description = desc, price = price, negotiable = negotiable, user_id = id, created = datetime.datetime.now())
-		return jsonify({'message':'Item created successfully'}), 200
-	else:
+	if id is None or name is None or desc is None or price is None or negotiable is None:
 		print "requred aruments needed to create the item is not provided in the request \n"
 		abort(400)
+
+	# create item
+	newItem = Items(name = name, description = desc, price = price, negotiable = negotiable, user_id = id, created = datetime.datetime.now())
+	session.add(newItem)
+	session.commit()
+	return jsonify({'message':'Item created successfully'}), 200
 
 # update item
 def updateItem():
