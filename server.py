@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from database import Base, Users, Items
 from flask import Flask, request, jsonify, abort, g
 from flask_httpauth import HTTPBasicAuth
-
+import datetime
 auth = HTTPBasicAuth()
 
 import pdb
@@ -149,7 +149,20 @@ def getItems():
 
 # create item
 def createItem():
-	return "Item Created Successfully"
+	id = request.json.get('id')
+	name request.json.get('name')
+	desc = request.json.get('description')
+	price = request.json.get('price')
+	negotiable = request.json.get('negotiable')
+	# created = request.json.get('created') # not sure if client should handle this or server.
+
+	if id is not None or name is not None or desc is not None or price is not None or negotiable is not None:
+		# create item
+		newItem = Items(name = name, description = desc, price = price, negotiable = negotiable, user_id = id, created = datetime.datetime.now())
+		return jsonify({'message':'Item created successfully'}), 200
+	else:
+		print "requred aruments needed to create the item is not provided in the request \n"
+		abort(400)
 
 # update item
 def updateItem():
