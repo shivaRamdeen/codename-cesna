@@ -1,7 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database import Base, Users, Items
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, g
+from flask_httpauth import HTTPBasicAuth
+
+auth = HTTPBasicAuth()
+
 import pdb
 app = Flask(__name__)
 
@@ -11,6 +15,31 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# verify password for basic auth
+@auth.verify_password
+def verify_password(username_or_token,password):
+	user_id = Users.verifyAuthToken(username_or_token)
+	if user_id:
+		user = session.query(Users).filter_by(id = user_id).one()
+	else:
+		user = session.query(Users).filter_by(email = username_or_token ).first()
+		if not user or not user.verifyPass(password):
+			return False
+	g.user = user
+	return True
+
+# token
+@app.route('/token')
+@auth.login_required
+def get_auth_token():
+	token = g.user.genAuthToken()
+	return jsonify({'token':token.decode('ascii')})
+
+@app.route('/v1.0/test')
+@auth.login_required
+def test():
+	return jsonify({'message':'Hello %s' % g.user.fname})
+	
 #all users endpoint
 @app.route('/v1.0/users', methods=['GET','POST','PUT','DELETE'])
 def User():

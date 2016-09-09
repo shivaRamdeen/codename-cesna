@@ -45,7 +45,7 @@ class Users(Base):
 	def verifyPass(self,password):
 		return pbkdf2_sha256.verify(password,self.pass_hash)
 
-	def genAuthToken(self, expiration=600)
+	def genAuthToken(self, expiration=600):
 		s = Serializer(secret_key, expires_in = expiration)
 		return s.dump({'id':self.id})
 
