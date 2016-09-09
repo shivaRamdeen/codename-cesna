@@ -20,7 +20,7 @@ class Users(Base):
 	lname = Column(String(80), nullable = False)
 	email = Column(String(120))
 	pass_hash = Column(String(120))
-	contact = Column(String(10), nullable = False)
+	contact = Column(String(11), nullable = False)
 	reports = Column(Integer)
 
 	# function to enable flask jsonify	

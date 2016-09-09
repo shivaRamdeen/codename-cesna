@@ -52,7 +52,7 @@ def createUser():
 	password = request.json.get('password')
 	email = request.json.get('email')
 	contact = request.json.get('contact')
-	print("%s %s %s %s %s" % (fname, lname, password, email, contact))
+
 	# check if params are valid
 	if fname is None or lname is None or password is None or email is None or contact is None:
 		print "Requred arguments not found"
@@ -61,7 +61,7 @@ def createUser():
 	# check if user already exits
 	exists = session.query(Users).filter_by(email = email).first()
 	if exists is not None:
-		print "The email address is already associated with an existing account!"
+		print "The email address is already associated with an existing account! \n"
 		return jsonify({'message':'The email address is already associated with an existing account!'}), 200
 
 	# create account
@@ -73,14 +73,40 @@ def createUser():
 
 # update user account
 def updateUser():
-	return "Account Updated Successfully"
+	fname = request.json.get('fname')
+	lname = request.json.get('lname')
+	password = request.json.get('password')
+	email = request.json.get('email')
+	contact = request.json.get('contact')
+	id = request.json.get('id')
+
+	if id is not None:
+		user = session.query(Users).filter_by(id = id).first()
+		if user is None:
+			print "The user does not exist \n"
+			abort(400)
+	else:
+		print "No user id specified in the request \n"
+		abort(400)
+
+	if fname is not None:
+		user.fname = fname
+	if lname is not None:
+		user.lname = lname
+	if password is not None:
+		user.hassPass(password)
+	if contact is not None:
+		user.contact = contact
+
+	session.commit()
+	return jsonify({'message':'Account %s updated sucessfully' % id}), 200
 
 # delete user account
 def deleteUser():
 	# check for valid parameters
 	id = request.json.get('id')
 	if id is None:
-		print "Required argument not found in request"
+		print "Required argument not found in request \n"
 		abort(400)
 
 	# delete account
