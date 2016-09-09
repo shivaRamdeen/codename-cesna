@@ -47,7 +47,7 @@ class Users(Base):
 
 	def genAuthToken(self, expiration=600):
 		s = Serializer(secret_key, expires_in = expiration)
-		return s.dump({'id':self.id})
+		return s.dumps({'id':self.id})
 
 
 	@staticmethod
