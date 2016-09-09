@@ -29,17 +29,12 @@ def verify_password(username_or_token,password):
 	return True
 
 # token
-@app.route('/token')
+@app.route('/v1.0/token')
 @auth.login_required
 def get_auth_token():
 	token = g.user.genAuthToken()
 	return jsonify({'token':token.decode('ascii')})
 
-@app.route('/v1.0/test')
-@auth.login_required
-def test():
-	return jsonify({'message':'Hello %s' % g.user.fname})
-	
 #all users endpoint
 @app.route('/v1.0/users', methods=['GET','POST','PUT','DELETE'])
 def User():
