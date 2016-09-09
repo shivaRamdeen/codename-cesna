@@ -4,8 +4,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from passlib.hash import pbkdf2_sha256
+import random, string
+from itsdangerous import(TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
 Base = declarative_base()
+
+secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
 
 # A class is the representation of a SQL table in python.
 # Mapper code maps objects in python to colums in our database
@@ -40,6 +44,23 @@ class Users(Base):
 	# function to verify passwords with hashes
 	def verifyPass(self,password):
 		return pbkdf2_sha256.verify(password,self.pass_hash)
+
+	def genAuthToken(self, expiration=600)
+		s = Serializer(secret_key, expires_in = expiration)
+		return s.dump({'id':self.id})
+
+
+	@staticmethod
+	def verifyAuthToken(token):
+		s = Serializer(secret_key)
+		try:
+			data = s.loads(token)
+		except SignatureExpired:
+			return None
+		except BadSignature:
+			return None
+		user_id = data['id']
+		return user_id
 
 # Item Table
 class Items(Base):
