@@ -76,6 +76,8 @@ class Items(Base):
 	users = relationship(Users)
 	#created = Column(Date) # check python data and time module to determine how to set this value
 	created = Column(String(30))
+	#sold = Column(String(10))
+	#report_count = Column(Integer, nullable = False)
 
 #	def __init__(self,name,description,price,negotiable,created):
 #		self.name = name
