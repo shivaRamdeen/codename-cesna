@@ -210,7 +210,7 @@ def deleteItem():
 def updateItem():
 	item_name = request.json.get('name')
 	item_desc = request.json.get('description')
-	item_price = request.json.get('prince')
+	item_price = request.json.get('price')
 	item_nego = request.json.get('negotiable')
 	item_id = request.json.get('id')
 	user_id = request.json.get('user_id')
@@ -230,6 +230,11 @@ def updateItem():
 	validItem = session.query(Items).filter_by(id = item_id).first()
 	if validItem is None:
 		print "The item does not exist"
+		abort(400)
+
+	user_id_int = int(user_id)
+	if validItem.user_id != user_id_int:
+		print("The user is not authorized to modify this item")
 		abort(400)
 
 	# update required fields
