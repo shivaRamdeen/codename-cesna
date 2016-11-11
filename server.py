@@ -62,6 +62,9 @@ def Item():
 	if request.method == 'PUT':
 		return updateItem()
 
+	if request.method == 'DELETE':
+		return deleteItem()
+
 #gets user accounts
 def getUsers():
 	# get user accounts
@@ -171,6 +174,35 @@ def createItem():
 	session.add(newItem)
 	session.commit()
 	return jsonify({'message':'Item created successfully'}), 200
+
+#delete item
+def deleteItem():
+	item_id = request.json.get('id')
+	user_id = request.json.get('user_id')
+
+	if item_id is None or user_id is None:
+		print "User ID and Item ID must be specified to delete Item"
+		abort(400)
+
+	#check if user exists??? does this need to be done?
+
+	#Check if item exists by id number
+	validItem = session.query(Items).filter_by(id = item_id).first()
+
+	if validItem is None:
+		print "The item referenced in the delete request is not available"
+		abort(400)
+
+	#check if item belongs to user
+	if validItem.user_id != user_id
+		print "The user that sent the request is not authorized to delete the item"
+		abort(400)
+
+	#delete item
+	sessoin.delete(validItem)
+	session.commit()
+	return jsonify({'message':'Item Deleted'}), 200
+
 
 # update item
 def updateItem():

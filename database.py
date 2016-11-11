@@ -79,12 +79,6 @@ class Items(Base):
 	#sold = Column(String(10))
 	#report_count = Column(Integer, nullable = False)
 
-#	def __init__(self,name,description,price,negotiable,created):
-#		self.name = name
-#		self.description = description
-#		self.price = price
-#		self.negotiable = negotiable
-#		self.created = created
 
 	@property
 	def serialize(self):
