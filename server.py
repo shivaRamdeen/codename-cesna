@@ -193,13 +193,15 @@ def deleteItem():
 		print "The item referenced in the delete request is not available"
 		abort(400)
 
+	#convert user_id string to int for proper converstion with database type
+	user_id_int = int(user_id)
 	#check if item belongs to user
-	if validItem.user_id != user_id
-		print "The user that sent the request is not authorized to delete the item"
+	if validItem.user_id != user_id_int:
+		print "The user that sent the request is not authorized to delete the item %s, %s" % (validItem.user_id, user_id)
 		abort(400)
 
 	#delete item
-	sessoin.delete(validItem)
+	session.delete(validItem)
 	session.commit()
 	return jsonify({'message':'Item Deleted'}), 200
 
