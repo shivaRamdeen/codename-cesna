@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from database import Base, Users, Items
 from flask import Flask, request, jsonify, abort, g
 from flask_httpauth import HTTPBasicAuth
-import datetime
+from datetime import datetime
 auth = HTTPBasicAuth()
 
 import pdb
@@ -52,7 +52,7 @@ def User():
 
 #all items endpoint
 @app.route('/v1.0/items', methods=['GET','POST','PUT','DELETE'])
-def Items():
+def Item():
 	if request.method == 'GET':
 		return getItems()
 
@@ -157,11 +157,17 @@ def createItem():
 	# created = request.json.get('created') # not sure if client should handle this or server.
 
 	if id is None or name is None or desc is None or price is None or negotiable is None:
-		print "requred aruments needed to create the item is not provided in the request \n"
+		print "required arguments needed to create the item is not provided in the request \n"
+		abort(400)
+
+	#check if user ID is valid.
+	validUser = session.query(Users).filter_by(id = id).first()
+	if validUser is None:
+		print("The user does not exist. To use the application please create an account.")
 		abort(400)
 
 	# create item
-	newItem = Items(name = name, description = desc, price = price, negotiable = negotiable, user_id = id, created = datetime.datetime.now())
+	newItem = Items(name = name, description = desc, price = price, negotiable = negotiable, user_id = id, created = datetime.now())
 	session.add(newItem)
 	session.commit()
 	return jsonify({'message':'Item created successfully'}), 200

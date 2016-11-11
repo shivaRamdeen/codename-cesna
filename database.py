@@ -68,11 +68,21 @@ class Items(Base):
 	id = Column(Integer, primary_key = True)
 	name = Column(String(80), nullable = False)
 	description = Column(String(300), nullable = False)
-	price = Column(Numeric, nullable = False)
-	negotiable = Column(Boolean(create_constraint = True))
+#	price = Column(Numeric, nullable = False)
+	price = Column(String(30), nullable = False)
+	#negotiable = Column(Boolean(create_constraint = True))
+	negotiable = Column(String(20))
 	user_id = Column(Integer, ForeignKey('users.id'))
 	users = relationship(Users)
-	created = Column(Date) # check python data and time module to determine how to set this value
+	#created = Column(Date) # check python data and time module to determine how to set this value
+	created = Column(String(30))
+
+#	def __init__(self,name,description,price,negotiable,created):
+#		self.name = name
+#		self.description = description
+#		self.price = price
+#		self.negotiable = negotiable
+#		self.created = created
 
 	@property
 	def serialize(self):
@@ -92,4 +102,3 @@ class Items(Base):
 # TODO: secure way of connecting to the database, password should not be in plain-text
 engine = create_engine('mysql://root:password@127.0.0.1/hustle')
 Base.metadata.create_all(engine)
-
