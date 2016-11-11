@@ -208,7 +208,46 @@ def deleteItem():
 
 # update item
 def updateItem():
-	return "Item Updated Successfully"
+	item_name = request.json.get('name')
+	item_desc = request.json.get('description')
+	item_price = request.json.get('prince')
+	item_nego = request.json.get('negotiable')
+	item_id = request.json.get('id')
+	user_id = request.json.get('user_id')
+
+	#check for required parameters
+	if item_id is None or user_id is None:
+		print "Requred parameters for the request are not provided"
+		abort(400)
+
+	#check if user exists
+	validUser = session.query(Users).filter_by(id = user_id).first()
+	if validUser is None:
+		print "The user id that sent the request does not exist"
+		abort(400)
+
+	#check that the item to update exists
+	validItem = session.query(Items).filter_by(id = item_id).first()
+	if validItem is None:
+		print "The item does not exist"
+		abort(400)
+
+	# update required fields
+	if item_name is not None:
+		validItem.name = item_name
+
+	if item_desc is not None:
+		validItem.description = item_desc
+
+	if item_price is not None:
+		validItem.price = item_price
+
+	if item_nego is not None:
+		validItem.negotiable = item_nego
+
+	session.commit()
+	return jsonify({'message': 'Item Updated Successfully'}), 200
+
 
 if __name__ == "__main__":
         app.debug = True
