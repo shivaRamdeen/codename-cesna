@@ -96,7 +96,7 @@ def createUser():
 	newUser.hashPass(password)
 	session.add(newUser)
 	session.commit()
-	return jsonify({'message': 'Account Created for %s' % newUser.fname}), 201
+	return jsonify({'message': 'Account Created for %s' % newUser.fname, 'user_id':'%s' % newUser.id}), 201
 
 # update user account
 def updateUser():
@@ -173,7 +173,7 @@ def createItem():
 	newItem = Items(name = name, description = desc, price = price, negotiable = negotiable, user_id = user_id, created = datetime.now())
 	session.add(newItem)
 	session.commit()
-	return jsonify({'message':'Item created successfully'}), 200
+	return jsonify({'message':'Item created successfully', 'item_id':'%s' % newItem.id, 'user_id':'%s' % newItem.user_id}), 200
 
 #delete item
 def deleteItem():

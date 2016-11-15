@@ -8,4 +8,4 @@ curl -H "Content-Type: application/json" -X DELETE -d '{"idz":"1"}' http://local
 
 #valid request
 printf "Testing delete endpoint with valid credentials \n"
-curl -H "Content-Type: application/json" -X DELETE -d '{"user_id":"1"}' http://localhost:80/v1.0/users
+curl -H "Content-Type: application/json" -X DELETE -d '{"user_id":"5"}' http://localhost:80/v1.0/users
