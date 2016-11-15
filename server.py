@@ -37,6 +37,7 @@ def get_auth_token():
 
 #all users endpoint
 @app.route('/v1.0/users', methods=['GET','POST','PUT','DELETE'])
+@auth.login_required
 def User():
 	if request.method == 'GET':
 		return getUsers()
@@ -52,6 +53,7 @@ def User():
 
 #all items endpoint
 @app.route('/v1.0/items', methods=['GET','POST','PUT','DELETE'])
+@auth.login_required
 def Item():
 	if request.method == 'GET':
 		return getItems()
