@@ -105,10 +105,10 @@ def updateUser():
 	password = request.json.get('password')
 	email = request.json.get('email')
 	contact = request.json.get('contact')
-	id = request.json.get('id')
+	user_id = request.json.get('user_id')
 
-	if id is not None:
-		user = session.query(Users).filter_by(id = id).first()
+	if user_id is not None:
+		user = session.query(Users).filter_by(id = user_id).first()
 		if user is None:
 			print "The user does not exist \n"
 			abort(400)
@@ -126,18 +126,18 @@ def updateUser():
 		user.contact = contact
 
 	session.commit()
-	return jsonify({'message':'Account %s updated sucessfully' % id}), 200
+	return jsonify({'message':'Account %s updated sucessfully' % user_id}), 200
 
 # delete user account
 def deleteUser():
 	# check for valid parameters
-	id = request.json.get('id')
+	user_id = request.json.get('user_id')
 	if id is None:
 		print "Required argument not found in request \n"
 		abort(400)
 
 	# delete account
-	delUser = session.query(Users).filter_by(id = request.json.get('id')).first()
+	delUser = session.query(Users).filter_by(id = request.json.get('user_id')).first()
 
 	if delUser is not None:
 		session.delete(delUser)
@@ -152,32 +152,32 @@ def getItems():
 
 # create item
 def createItem():
-	id = request.json.get('id')
+	user_id = request.json.get('user_id')
 	name = request.json.get('name')
 	desc = request.json.get('description')
 	price = request.json.get('price')
 	negotiable = request.json.get('negotiable')
 	# created = request.json.get('created') # not sure if client should handle this or server.
 
-	if id is None or name is None or desc is None or price is None or negotiable is None:
+	if user_id is None or name is None or desc is None or price is None or negotiable is None:
 		print "required arguments needed to create the item is not provided in the request \n"
 		abort(400)
 
 	#check if user ID is valid.
-	validUser = session.query(Users).filter_by(id = id).first()
+	validUser = session.query(Users).filter_by(id = user_id).first()
 	if validUser is None:
 		print("The user does not exist. To use the application please create an account.")
 		abort(400)
 
 	# create item
-	newItem = Items(name = name, description = desc, price = price, negotiable = negotiable, user_id = id, created = datetime.now())
+	newItem = Items(name = name, description = desc, price = price, negotiable = negotiable, user_id = user_id, created = datetime.now())
 	session.add(newItem)
 	session.commit()
 	return jsonify({'message':'Item created successfully'}), 200
 
 #delete item
 def deleteItem():
-	item_id = request.json.get('id')
+	item_id = request.json.get('item_id')
 	user_id = request.json.get('user_id')
 
 	if item_id is None or user_id is None:
@@ -212,7 +212,7 @@ def updateItem():
 	item_desc = request.json.get('description')
 	item_price = request.json.get('price')
 	item_nego = request.json.get('negotiable')
-	item_id = request.json.get('id')
+	item_id = request.json.get('item_id')
 	user_id = request.json.get('user_id')
 
 	#check for required parameters

@@ -6,4 +6,4 @@
 #curl -H "Content-Type: application/json" -X PUT -d '{"fname":"Shane","contact":"18687230782"}' http://localhost:80/v1.0/users
 
 # Valid case
-curl -H "Content-Type: application/json" -X PUT -d '{"id":"6","user_id": "1", "name":"updated item","description":"we just updated the item","negotiable":"no","price":"19.95"}' http://localhost:80/v1.0/items
+curl -H "Content-Type: application/json" -X PUT -d '{"item_id":"1","user_id": "2", "name":"updated item","description":"we just updated the item","negotiable":"no","price":"19.95"}' http://localhost:80/v1.0/items
