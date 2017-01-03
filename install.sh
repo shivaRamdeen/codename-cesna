@@ -3,8 +3,8 @@
 #automatic installation of the server and its dependencies.
 #Application will be containerized in the future.
 
-#sudo apt-get update -y
-#sudo apt-get upgrade -y
+sudo apt-get update -y
+sudo apt-get upgrade -y
 sudo apt-get install python-pip -y
 sudo pip install --upgrade pip
 sudo apt-get install mysql-server -y
